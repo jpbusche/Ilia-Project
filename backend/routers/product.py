@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from utils.schemas import Costumers
 from utils.auth import get_current_costumer
-from models.product import get_product
+from models.product import get_product, get_products
 
 products = APIRouter()
 
@@ -15,3 +15,8 @@ def get_product_by_id(product_id: str, current_costumer: Costumers = Depends(get
         return {"success": True, "product": product}
     except Exception as e:
         return JSONResponse(status_code=401, content={"message": str(e), "success": False})
+    
+@products.get('/')
+def get_all_products(current_costumer: Costumers = Depends(get_current_costumer)):
+    products = get_products()
+    return {"success": True, "products": products}
