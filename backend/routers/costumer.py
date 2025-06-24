@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from routers.schemas.costumer_schemas import Costumers, Login
+from utils.schemas import Costumers, Login
 from models.costumer import save_costumer, validate_user
-from utils.auth import create_token, get_current_user
+from utils.auth import create_token
 
 costumers = APIRouter()
 

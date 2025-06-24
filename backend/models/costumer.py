@@ -1,7 +1,7 @@
 from mongoengine import Document, StringField
 from passlib.context import CryptContext
 
-from routers.schemas.costumer_schemas import Costumers, Login
+from utils.schemas import Costumers, Login
 from utils.exceptions import CostumerException
 
 context = CryptContext(schemes=["bcrypt"], deprecated="auto")

@@ -13,11 +13,13 @@ def create_token(email: str):
 def verify_token(token: str, test_email: str):
     return context.verify(test_email, token)
     
-def get_current_user(request: Request):
+def get_current_costumer(request: Request):
     token = request.headers.get("Token")
     if not token:
         raise AuthException("Authetication Token not found!", 403)
-    for costumer in Costumers.objects():
-        if verify_token(token, costumer.email): return costumer
-    
-    raise AuthException("Authetication Token invalid", 403)
+    try:
+        for costumer in Costumers.objects():
+            if verify_token(token, costumer.email): return costumer
+        raise AuthException("Authetication Token invalid", 403)
+    except:
+        raise AuthException("Authetication Token invalid", 403)
