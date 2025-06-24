@@ -1,0 +1,4 @@
+fastapi[standard]
+mongoengine==0.29.1
+pydantic==2.11.7
+passlib==1.7.4
