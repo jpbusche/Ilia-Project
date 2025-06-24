@@ -1,8 +1,8 @@
 from mongoengine import Document, StringField
 from passlib.context import CryptContext
 
-from routers.schemas.costumer_schemas import CostumerCreate, CostumerLogin
-from settings import CostumerException
+from routers.schemas.costumer_schemas import Costumers, Login
+from utils.exceptions import CostumerException
 
 context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -15,7 +15,7 @@ class Costumers(Document):
     email = StringField(required=True, unique=True)
     password = StringField(required=True)
 
-def save_costumer(costumer_data: CostumerCreate):
+def save_costumer(costumer_data: Costumers):
     if Costumers.objects(email=costumer_data.email):
         raise CostumerException("Costumer with this email already exists!")
     costumer = Costumers(
@@ -25,7 +25,7 @@ def save_costumer(costumer_data: CostumerCreate):
     )
     costumer.save()
 
-def validate_user(login: CostumerLogin):
+def validate_user(login: Login):
     user = Costumers.objects(email=login.email).first()
     if not user:
         raise CostumerException("Costumer not found!")

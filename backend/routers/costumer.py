@@ -1,27 +1,26 @@
-from fastapi import APIRouter, HTTPException, Response
+from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 
-from routers.schemas.costumer_schemas import CostumerCreate, CostumerLogin
+from routers.schemas.costumer_schemas import Costumers, Login
 from models.costumer import save_costumer, validate_user
-from utils.auth import create_token
-from settings import EXPIRE_TIME
+from utils.auth import create_token, get_current_user
 
 costumers = APIRouter()
 
 
 @costumers.post('/register')
-def create_costumer(costumer: CostumerCreate):
+def create_costumer(costumer: Costumers):
     try:
         save_costumer(costumer)
         return {"success": True}
     except Exception as e:
-        raise HTTPException(status_code=401, detail=str(e))
+        return JSONResponse(status_code=401, content={"message": str(e), "success": False})
 
 @costumers.post('/login')
-def login_user(login: CostumerLogin, response: Response):
+def login_user(login: Login):
     try:
         validate_user(login)
-        token = create_token(data={"email": login.email})
-        response.set_cookie(key="Token", value=token, httponly=True, max_age= 60 * EXPIRE_TIME)
-        return {"success": True}
+        token = create_token(login.email)
+        return {"success": True, "token": token}
     except Exception as e:
-        raise HTTPException(status_code=401, detail=str(e))
+        return JSONResponse(status_code=401, content={"message": str(e), "success": False})

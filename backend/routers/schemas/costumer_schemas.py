@@ -1,11 +1,11 @@
 from pydantic import BaseModel
 
 
-class CostumerCreate(BaseModel):
+class Costumers(BaseModel):
     name: str
     email: str
     password: str
 
-class CostumerLogin(BaseModel):
+class Login(BaseModel):
     email: str
     password: str

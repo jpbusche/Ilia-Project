@@ -1,16 +1,23 @@
-from jose import jwt, JWTError
-from datetime import datetime, timedelta
-from fastapi import Request, HTTPException
+from fastapi import Request
+from passlib.context import CryptContext
 
-from settings import SECRET_KEY, EXPIRE_TIME
+from utils.exceptions import AuthException
+from models.costumer import Costumers
+
+context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def create_token(data: dict):
-    token_data = data | {"exp": datetime.now() + timedelta(minutes=EXPIRE_TIME)}
-    return jwt.encode(token_data, SECRET_KEY, "HS256")
+def create_token(email: str):
+    return context.hash(email)
 
-def verify_token(token: str):
-    try:
-        return jwt.decode(token, SECRET_KEY, "HS256")
-    except JWTError:
-        return None
+def verify_token(token: str, test_email: str):
+    return context.verify(test_email, token)
+    
+def get_current_user(request: Request):
+    token = request.headers.get("Token")
+    if not token:
+        raise AuthException("Authetication Token not found!", 403)
+    for costumer in Costumers.objects():
+        if verify_token(token, costumer.email): return costumer
+    
+    raise AuthException("Authetication Token invalid", 403)
