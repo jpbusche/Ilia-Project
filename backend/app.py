@@ -1,6 +1,7 @@
 from mongoengine import connect, disconnect
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 from routers.costumer import costumers
 from routers.product import products
@@ -19,6 +20,14 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(costumers, prefix="/costumers", tags=["costumers"])
 app.include_router(products, prefix="/products", tags=["products"])
 app.include_router(orders, prefix="/orders", tags=["orders"])
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.exception_handler(AuthException)
