@@ -82,6 +82,9 @@ def get_order(order_id: str, owner: str):
         raise OrderException("Order not found!")
     return order.to_dict()
 
+def history(owner: str):
+    return [order.to_dict() for order in Orders.objects(owner=owner, status="closed")]
+
 def _create_order(prod, quantity: int, owner: str):
     products = []
     products.append({"name": prod.name, "quantity": quantity, "price": prod.price})
