@@ -9,7 +9,7 @@ products = APIRouter()
 
 
 @products.get('/{product_id}')
-def get_product_by_id(product_id: str, current_costumer: Costumers = Depends(get_current_costumer)):
+def get_product_by_id(product_id: str):
     try:
         product = get_product(product_id)
         return {"success": True, "product": product}
@@ -17,6 +17,6 @@ def get_product_by_id(product_id: str, current_costumer: Costumers = Depends(get
         return JSONResponse(status_code=401, content={"message": str(e), "success": False})
     
 @products.get('/')
-def get_all_products(current_costumer: Costumers = Depends(get_current_costumer)):
+def get_all_products():
     products = get_products()
     return {"success": True, "products": products}
