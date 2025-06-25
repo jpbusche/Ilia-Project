@@ -33,12 +33,37 @@ def add_product(product: Product, owner: str):
     if product.quantity > prod.quantity:
         raise OrderException("Not enough product in store!")
     
-    order = Orders.objects(owner=owner).first()
+    order = Orders.objects(owner=owner, status="open").first()
     if order:
         _update_order(order, prod, product.quantity)
     else:
         order = _create_order(prod, product.quantity, owner)
     return order.order_id
+
+def remove_product(product: Product, owner: str):
+    prod = Products.objects(product_id=product.id).first()
+    if not prod:
+        raise OrderException("Product to remove not found!")
+    
+    order = Orders.objects(owner=owner, status="open").first()
+    if not order:
+        raise OrderException("This costumer don't have open order!")
+    
+    order_product = None
+    for _product in order.products:
+        if _product["name"] == prod.name:
+            order_product = _product
+            break
+    if not order_product:
+        raise OrderException("Product not found in order!")
+    
+    order.products = [_product for _product in order.products if _product["name"] != prod.name]
+    order.total_price -= order_product["quantity"] * prod.price
+    order.save()
+    prod.quantity += order_product["quantity"]
+    prod.save()
+    return order.order_id
+
 
 def _create_order(prod, quantity: int, owner: str):
     products = []
