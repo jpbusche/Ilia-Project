@@ -4,6 +4,9 @@ class CostumerException(Exception):
 class ProductException(Exception):
     pass
 
+class OrderException(Exception):
+    pass
+
 class AuthException(Exception):
     
     def __init__(self, message: str, status_code: int = 400):

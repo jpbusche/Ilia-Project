@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class Costumers(BaseModel):
@@ -9,3 +10,7 @@ class Costumers(BaseModel):
 class Login(BaseModel):
     email: str
     password: str
+
+class Product(BaseModel):
+    id: str
+    quantity: Optional[int] = 1

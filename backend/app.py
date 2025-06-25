@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 
 from routers.costumer import costumers
 from routers.product import products
+from routers.order import orders
 from settings import MONGO_URL, MONGO_DB
 from utils.exceptions import AuthException
 from database.populate import populate_database
@@ -17,6 +18,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.include_router(costumers, prefix="/costumers", tags=["costumers"])
 app.include_router(products, prefix="/products", tags=["products"])
+app.include_router(orders, prefix="/orders", tags=["orders"])
 
 
 @app.exception_handler(AuthException)
