@@ -14,3 +14,6 @@ class Login(BaseModel):
 class Product(BaseModel):
     id: str
     quantity: Optional[int] = 1
+
+class Order(BaseModel):
+    id: str

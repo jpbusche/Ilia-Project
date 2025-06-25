@@ -2,7 +2,7 @@ from mongoengine import Document, StringField, ListField, FloatField, DateTimeFi
 from datetime import datetime
 from uuid import uuid4
 
-from utils.schemas import Product
+from utils.schemas import Product, Order
 from utils.exceptions import OrderException
 from models.product import Products
 
@@ -58,11 +58,25 @@ def remove_product(product: Product, owner: str):
         raise OrderException("Product not found in order!")
     
     order.products = [_product for _product in order.products if _product["name"] != prod.name]
-    order.total_price -= order_product["quantity"] * prod.price
-    order.save()
+    if not order.products:
+        order.delete()
+    else:
+        order.total_price -= order_product["quantity"] * prod.price
+        order.save()
     prod.quantity += order_product["quantity"]
     prod.save()
-    return order.order_id
+
+def submit(order: Order, owner: str):
+    _order = Orders.objects(order_id=order.id).first()
+    if not _order:
+        raise OrderException("Order not found!")
+    if _order.owner != owner:
+        raise OrderException("Diferent owner!")
+    if _order.status == "closed":
+        raise OrderException("Order already submitted!")
+    
+    _order.status = "closed"
+    _order.save()
 
 
 def _create_order(prod, quantity: int, owner: str):
