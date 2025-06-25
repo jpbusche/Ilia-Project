@@ -23,7 +23,7 @@ class Orders(Document):
             "id": self.order_id,
             "products": self.products,
             "total_price": self.total_price,
-            "order_date": self.create_at
+            "order_date": self.created_at
         }
     
 def add_product(product: Product, owner: str):
@@ -67,17 +67,20 @@ def remove_product(product: Product, owner: str):
     prod.save()
 
 def submit(order: Order, owner: str):
-    _order = Orders.objects(order_id=order.id).first()
+    _order = Orders.objects(order_id=order.id, owner=owner).first()
     if not _order:
         raise OrderException("Order not found!")
-    if _order.owner != owner:
-        raise OrderException("Diferent owner!")
     if _order.status == "closed":
         raise OrderException("Order already submitted!")
     
     _order.status = "closed"
     _order.save()
 
+def get_order(order_id: str, owner: str):
+    order = Orders.objects(order_id=order_id, owner=owner).first()
+    if not order:
+        raise OrderException("Order not found!")
+    return order.to_dict()
 
 def _create_order(prod, quantity: int, owner: str):
     products = []

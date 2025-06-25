@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from utils.schemas import Product, Costumers, Order
 from utils.auth import get_current_costumer
-from models.order import add_product, remove_product, submit
+from models.order import add_product, remove_product, submit, get_order
 
 orders = APIRouter()
 
@@ -29,5 +29,13 @@ def submit_order(order: Order, current_costumer: Costumers = Depends(get_current
     try:
         submit(order, current_costumer.email)
         return {"success": True}
+    except Exception as e:
+        return JSONResponse(status_code=401, content={"message": str(e), "success": False})
+    
+@orders.get('/{order_id}')
+def get_order_by_id(order_id: str, current_costumer: Costumers = Depends(get_current_costumer)):
+    try:
+        order = get_order(order_id, current_costumer.email)
+        return {"success": True, "order": order}
     except Exception as e:
         return JSONResponse(status_code=401, content={"message": str(e), "success": False})
