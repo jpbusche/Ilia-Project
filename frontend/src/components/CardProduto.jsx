@@ -1,7 +1,7 @@
 import {useState} from "react";
 import "../css/CardProduto.css"
 
-function CardProduto({ product }) {
+function CardProduto({ product, onProductAdded }) {
     const [quantity, setQuantity] = useState(1);
     const increment = () => setQuantity((q) => q + 1);
     const decrement = () => setQuantity((q) => Math.max(1, q - 1));
@@ -26,6 +26,7 @@ function CardProduto({ product }) {
         const data = await response.json();
         if (data.success) {
             alert("Item inserido com sucesso");
+            onProductAdded();
         } else {
             alert(data.message);
         }
@@ -35,7 +36,10 @@ function CardProduto({ product }) {
         <div className="card">
             <img src={product.image_link} alt={product.name} className={`card-img ${product.quantity === 0 ? 'out-of-stock': ''}`} />
             <div classnName="card-info">
-                <p className="card-price">R$ {product.price.toFixed(2)}</p>
+                <div className="card-price">
+                    <span className="card-price">R$ {product.price.toFixed(2)}</span>
+                    <span classname="card-price">Qtd Estoque: {product.quantity}</span>
+                </div>
                 <div className="card-actions">
                     <div className="quantity-control">
                         <input type="number" min="1" value={quantity} onChange={handleChange} />

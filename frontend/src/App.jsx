@@ -6,17 +6,22 @@ function App() {
     const [products, setProducts] = useState([]);
     const apiUrl = import.meta.env.API_URL || "http://localhost:8000";
 
+    const fetchProducts = async () => {
+        const response = await fetch(`${apiUrl}/products`)
+        const data = await response.json();
+        if (data.success) {
+            setProducts(data.products);
+        } else {
+            alert(data.message);
+        }
+    }
+
+    const handleProductAdded = () => {
+        fetchProducts();
+    }
+
     useEffect(() => {
-        fetch(`${apiUrl}/products`)
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.success) {
-                    setProducts(data.products);
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch((err) => console.error("Erro ao buscar produtos", err))
+        fetchProducts();
     }, []);
 
     return (
@@ -25,7 +30,7 @@ function App() {
             <main className="main">
                 <div className="cards-grid">
                     {products.map((product) => (
-                        <CardProduto key={product.id} product={product}/>
+                        <CardProduto key={product.id} product={product} onProductAdded={handleProductAdded}/>
                     ))}
                 </div>
             </main>

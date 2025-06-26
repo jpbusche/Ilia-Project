@@ -11,7 +11,7 @@ class Orders(Document):
 
     meta = {"collection": "orders"}
 
-    order_id = StringField(required=True, unique=True, default=uuid4().hex)
+    order_id = StringField(required=True, unique=True)
     status = StringField(default="open")
     owner = StringField(required=True)
     products = ListField(default={})
@@ -88,6 +88,7 @@ def _create_order(prod, quantity: int, owner: str):
     products = []
     products.append({"name": prod.name, "quantity": quantity, "price": prod.price, "id": prod.product_id})
     order = Orders(
+        order_id=uuid4().hex,
         owner=owner,
         products=products,
         total_price=quantity * prod.price
