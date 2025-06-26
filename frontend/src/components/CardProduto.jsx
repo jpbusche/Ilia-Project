@@ -9,10 +9,10 @@ function CardProduto({ product }) {
         const value = parseInt(e.target.value, 10);
         setQuantity(isNaN(value) || value < 1 ? 1 : value);
     };
+    const apiUrl = import.meta.env.API_URL || "http://localhost:8000";
 
     const handleAddProduct = async (e) => {
-        e.preventDefault();
-        const response = await fetch("http://localhost:8000/orders/add", {
+        const response = await fetch(`${apiUrl}/orders/add`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

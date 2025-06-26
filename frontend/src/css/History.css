@@ -1,0 +1,22 @@
+.history-container {
+    margin: 5px auto;
+    padding: 20px;
+    color: white;
+}
+
+.order-container {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+.history-table th, .history-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid rgb(121, 121, 121);
+}

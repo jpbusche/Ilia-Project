@@ -4,9 +4,10 @@ import Header from "./components/Header"
 
 function App() {
     const [products, setProducts] = useState([]);
+    const apiUrl = import.meta.env.API_URL || "http://localhost:8000";
 
     useEffect(() => {
-        fetch("http://localhost:8000/products")
+        fetch(`${apiUrl}/products`)
             .then((res) => res.json())
             .then((data) => {
                 if (data.success) {

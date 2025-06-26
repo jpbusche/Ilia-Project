@@ -10,7 +10,20 @@ function Header() {
     }
 
     const handleUserClick = () => {
-        navigate('/login');
+        if (!localStorage.getItem("token")) {
+            navigate('/login');
+        } else {
+            navigate('/history');
+        }
+    }
+
+    const handleCartClick = () => {
+        if (localStorage.getItem("token")) {
+            navigate('/cart');
+        } else {
+            alert("Para acessar o carinho necessita estar logado");
+            navigate('/login')
+        }
     }
 
     return (
@@ -18,7 +31,7 @@ function Header() {
             <div className="logo" onClick={handleMenuClick}>Fake Store</div>
             <div className="icons">
                 <FiUser className="icon" onClick={handleUserClick}/>
-                <FiShoppingCart className="icon"/>
+                <FiShoppingCart className="icon" onClick={handleCartClick}/>
             </div>
         </header>
     );

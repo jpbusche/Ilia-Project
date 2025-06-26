@@ -38,7 +38,6 @@ def add_product(product: Product, owner: str):
         _update_order(order, prod, product.quantity)
     else:
         order = _create_order(prod, product.quantity, owner)
-    return order.order_id
 
 def remove_product(product: Product, owner: str):
     prod = Products.objects(product_id=product.id).first()
@@ -76,8 +75,8 @@ def submit(order: Order, owner: str):
     _order.status = "closed"
     _order.save()
 
-def get_order(order_id: str, owner: str):
-    order = Orders.objects(order_id=order_id, owner=owner).first()
+def get_order(owner: str):
+    order = Orders.objects(owner=owner, status="open").first()
     if not order:
         raise OrderException("Order not found!")
     return order.to_dict()
@@ -87,7 +86,7 @@ def history(owner: str):
 
 def _create_order(prod, quantity: int, owner: str):
     products = []
-    products.append({"name": prod.name, "quantity": quantity, "price": prod.price})
+    products.append({"name": prod.name, "quantity": quantity, "price": prod.price, "id": prod.product_id})
     order = Orders(
         owner=owner,
         products=products,
@@ -100,7 +99,7 @@ def _create_order(prod, quantity: int, owner: str):
 
 def _update_order(order, prod, quantity: int):
     products = order.products
-    products.append({"name": prod.name, "quantity": quantity, "price": prod.price})
+    products.append({"name": prod.name, "quantity": quantity, "price": prod.price, "id": prod.product_id})
     order.total_price += quantity * prod.price
     order.save()
     prod.quantity -= quantity

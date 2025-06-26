@@ -1,4 +1,4 @@
-import {useContext, useState} from "react";
+import {useState} from "react";
 import Header from "../components/Header";
 import "../css/Login.css";
 
@@ -9,10 +9,11 @@ function Login() {
     const [passwordModal, setPasswordModal] = useState('');
     const [name, setName] = useState('');
     const [showModal, setVisibility] = useState(false);
+    const apiUrl = import.meta.env.API_URL || "http://localhost:8000";
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const response = await fetch("http://localhost:8000/costumers/login", {
+        const response = await fetch(`${apiUrl}/costumers/login`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -40,7 +41,7 @@ function Login() {
 
     const handleCreate = async (e) => {
         e.preventDefault();
-        const response = await fetch("http://localhost:8000/costumers/register", {
+        const response = await fetch(`${apiUrl}/costumers/login`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
