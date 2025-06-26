@@ -7,9 +7,13 @@ Este projeto foi desenvolvido com intuito de demonstrar meus conhecimentos para 
 Para executar esse projeto, basta seguir os passos abaixo:
 * Clonar repositório do Git
 * Baixar e montar as imagens
-`docker-compose build`
+```
+docker-compose build
+```
 * Executar as imagens
-`docker-compose up -d`
+```
+docker-compose up -d
+```
 
 Apos executados esses passos tanto o backend, tanto o front podem ser encontrados nesses links:
 * [API](http://localhost:8000/docs)
@@ -31,4 +35,6 @@ cd backend
 pip install -r requeriments.txt
 ```
 * Executar os testes com Nose
-`nose2 tests`
+```
+nose2 tests
+```
