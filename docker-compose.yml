@@ -17,3 +17,16 @@ services:
     depends_on:
       - mongodb
     restart: always
+
+  fake_store:
+    container_name: fake_store
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    environment:
+      - API_URL=http://fake_store_api:8000
+    depends_on:
+      - fake_store_api
+    restart: always
