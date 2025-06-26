@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import "./css/App.css";
+import { useEffect, useState } from "react";
 import CardProduto from "./components/CardProduto";
-import {FiUser, FiShoppingCart} from "react-icons/fi";
+import Header from "./components/Header"
 
 function App() {
     const [products, setProducts] = useState([]);
@@ -21,17 +20,11 @@ function App() {
 
     return (
         <div className="app">
-            <header className="header">
-                <div className="logo">Fake Store</div>
-                <div className="icons">
-                    <FiUser className="icon"/>
-                    <FiShoppingCart className="icon"/>
-                </div>
-            </header>
+            <Header />
             <main className="main">
                 <div className="cards-grid">
                     {products.map((product) => (
-                        <CardProduto key={product.product_id} product={product}/>
+                        <CardProduto key={product.id} product={product}/>
                     ))}
                 </div>
             </main>

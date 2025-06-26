@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import {useState} from "react";
 import "../css/CardProduto.css"
 
 function CardProduto({ product }) {
@@ -9,6 +9,28 @@ function CardProduto({ product }) {
         const value = parseInt(e.target.value, 10);
         setQuantity(isNaN(value) || value < 1 ? 1 : value);
     };
+
+    const handleAddProduct = async (e) => {
+        e.preventDefault();
+        const response = await fetch("http://localhost:8000/orders/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Token": localStorage.getItem("token")
+            },
+            body: JSON.stringify({
+                id: product.id,
+                quantity: quantity
+            })
+        });
+        const data = await response.json();
+        if (data.success) {
+            alert("Item inserido com sucesso");
+        } else {
+            alert(data.message);
+        }
+    }
+
     return (
         <div className="card">
             <img src={product.image_link} alt={product.name} className={`card-img ${product.quantity === 0 ? 'out-of-stock': ''}`} />
@@ -22,7 +44,7 @@ function CardProduto({ product }) {
                             <button onClick={decrement}>▼</button>
                         </div>
                     </div>
-                    <button className="btn-add">LISTA DE COMPRAS</button>
+                    <button className="btn-add" onClick={handleAddProduct}>LISTA DE COMPRAS</button>
                 </div>
             </div>
         </div>
