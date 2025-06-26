@@ -37,7 +37,7 @@ def add_product(product: Product, owner: str):
     if order:
         _update_order(order, prod, product.quantity)
     else:
-        order = _create_order(prod, product.quantity, owner)
+        _create_order(prod, product.quantity, owner)
 
 def remove_product(product: Product, owner: str):
     prod = Products.objects(product_id=product.id).first()
@@ -96,7 +96,6 @@ def _create_order(prod, quantity: int, owner: str):
     prod.quantity -= quantity
     prod.save()
     order.save()
-    return order
 
 def _update_order(order, prod, quantity: int):
     products = order.products

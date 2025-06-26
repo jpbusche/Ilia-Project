@@ -3,3 +3,5 @@ mongoengine==0.29.1
 pydantic==2.11.7
 passlib==1.7.4
 python-jose==3.5.0
+unittest==8.4.1
+nose2==0.15.1
