@@ -41,7 +41,7 @@ function Login() {
 
     const handleCreate = async (e) => {
         e.preventDefault();
-        const response = await fetch(`${apiUrl}/costumers/login`, {
+        const response = await fetch(`${apiUrl}/costumers/register`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

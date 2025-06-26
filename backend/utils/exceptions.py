@@ -1,13 +1,4 @@
-class CostumerException(Exception):
-    pass
-
-class ProductException(Exception):
-    pass
-
-class OrderException(Exception):
-    pass
-
-class AuthException(Exception):
+class APIException(Exception):
     
     def __init__(self, message: str, status_code: int = 400):
         self.message = message

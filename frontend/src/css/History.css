@@ -20,3 +20,17 @@
     text-align: left;
     border-bottom: 1px solid rgb(121, 121, 121);
 }
+
+.logout {
+    margin-top: 5px;
+    margin-left: 15px;
+    padding: 0.7rem;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    font-size: 1rem;
+    background-color: #d32f2f;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: 'WDXL Lubrifont SC', sans-serif;
+}

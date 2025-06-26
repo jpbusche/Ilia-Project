@@ -1,7 +1,7 @@
 from fastapi import Request
 from passlib.context import CryptContext
 
-from utils.exceptions import AuthException
+from utils.exceptions import APIException
 from models.costumer import Costumers
 
 context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -16,10 +16,10 @@ def verify_token(token: str, test_email: str):
 def get_current_costumer(request: Request):
     token = request.headers.get("Token")
     if not token:
-        raise AuthException("Authetication Token not found!", 403)
+        raise APIException("Authetication Token not found!", 403)
     try:
         for costumer in Costumers.objects():
             if verify_token(token, costumer.email): return costumer
-        raise AuthException("Authetication Token invalid", 403)
+        raise APIException("Authetication Token invalid", 403)
     except:
-        raise AuthException("Authetication Token invalid", 403)
+        raise APIException("Authetication Token invalid", 403)

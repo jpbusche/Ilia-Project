@@ -1,6 +1,6 @@
 from mongoengine import Document, StringField, FloatField, IntField
 
-from utils.exceptions import ProductException
+from utils.exceptions import APIException
 
 
 class Products(Document):
@@ -29,7 +29,7 @@ class Products(Document):
 def get_product(product_id: str):
     product = Products.objects(product_id=product_id).first()
     if not product:
-        raise ProductException("Product not found!")
+        raise APIException("Product not found!", 404)
     return product.to_dict()
 
 def get_products():

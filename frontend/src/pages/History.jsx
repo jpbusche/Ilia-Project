@@ -4,7 +4,7 @@ import "../css/History.css"
 
 function History() {
 
-    const [history, setHistory] = useState([])
+    const [hist, setHistory] = useState([]);
     const apiUrl = import.meta.env.API_URL || "http://localhost:8000";
 
     const formatDate = (isoString) => {
@@ -16,6 +16,11 @@ function History() {
             hour: "2-digit",
             minute: "2-digit",
         });
+    }
+
+    const handleLogout = async () => {
+        localStorage.removeItem("token");
+        window.location.href = '/';
     }
     
     useEffect(() => {
@@ -34,12 +39,12 @@ function History() {
     return (
         <div>
             <Header/>
-            {history.lenght === 0 ? (
+            {hist.length === 0 ? (
                 <p>Sem historico de compras</p>
             ) : (
                 <div className="history-container">
                     <h1>Historico de Compras:</h1>
-                    {history.map((order) => (
+                    {hist.map((order) => (
                         <div className="order-container">
                             <h3>Compra ID: {order.id}</h3>
                             <h3>Data da compra: {formatDate(order.order_date)}</h3>
@@ -68,7 +73,8 @@ function History() {
                         </div>
                     ))}         
                 </div>
-            )}  
+            )}
+            <button className="logout" onClick={handleLogout}>Logout</button>  
         </div>
     )
 }

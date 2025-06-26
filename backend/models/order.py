@@ -3,7 +3,7 @@ from datetime import datetime
 from uuid import uuid4
 
 from utils.schemas import Product, Order
-from utils.exceptions import OrderException
+from utils.exceptions import APIException
 from models.product import Products
 
 
@@ -29,9 +29,9 @@ class Orders(Document):
 def add_product(product: Product, owner: str):
     prod = Products.objects(product_id=product.id).first()
     if not prod:
-        raise OrderException("Product to add not found!")
+        raise APIException("Product to add not found!", 404)
     if product.quantity > prod.quantity:
-        raise OrderException("Not enough product in store!")
+        raise APIException("Not enough product in store!", 400)
     
     order = Orders.objects(owner=owner, status="open").first()
     if order:
@@ -42,11 +42,11 @@ def add_product(product: Product, owner: str):
 def remove_product(product: Product, owner: str):
     prod = Products.objects(product_id=product.id).first()
     if not prod:
-        raise OrderException("Product to remove not found!")
+        raise APIException("Product to remove not found!", 404)
     
     order = Orders.objects(owner=owner, status="open").first()
     if not order:
-        raise OrderException("This costumer don't have open order!")
+        raise APIException("This costumer don't have open order!", 400)
     
     order_product = None
     for _product in order.products:
@@ -54,7 +54,7 @@ def remove_product(product: Product, owner: str):
             order_product = _product
             break
     if not order_product:
-        raise OrderException("Product not found in order!")
+        raise APIException("Product not found in order!", 404)
     
     order.products = [_product for _product in order.products if _product["name"] != prod.name]
     if not order.products:
@@ -68,9 +68,9 @@ def remove_product(product: Product, owner: str):
 def submit(order: Order, owner: str):
     _order = Orders.objects(order_id=order.id, owner=owner).first()
     if not _order:
-        raise OrderException("Order not found!")
+        raise APIException("Order not found!", 404)
     if _order.status == "closed":
-        raise OrderException("Order already submitted!")
+        raise APIException("Order already submitted!", 400)
     
     _order.status = "closed"
     _order.save()
@@ -78,7 +78,7 @@ def submit(order: Order, owner: str):
 def get_order(owner: str):
     order = Orders.objects(owner=owner, status="open").first()
     if not order:
-        raise OrderException("Order not found!")
+        raise APIException("Order not found!", 404)
     return order.to_dict()
 
 def history(owner: str):

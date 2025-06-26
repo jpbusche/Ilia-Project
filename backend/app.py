@@ -7,7 +7,7 @@ from routers.costumer import costumers
 from routers.product import products
 from routers.order import orders
 from settings import MONGO_URL, MONGO_DB
-from utils.exceptions import AuthException
+from utils.exceptions import APIException
 from database.populate import populate_database
 
 async def lifespan(app: FastAPI):
@@ -30,6 +30,6 @@ app.add_middleware(
 )
 
 
-@app.exception_handler(AuthException)
-async def handle_auth_exception(request: Request, exception: AuthException):
+@app.exception_handler(APIException)
+async def handle_auth_exception(request: Request, exception: APIException):
     return JSONResponse(status_code=exception.status_code, content={"message": exception.message, "success": False})
